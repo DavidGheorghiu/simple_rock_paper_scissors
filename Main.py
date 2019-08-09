@@ -1,14 +1,31 @@
 import getpass
 import os
-from Player_class import Player as pl
+from Player_class import Player
 
-def printPlayerHeaths(player1, player2):
-    print(
-            '****************\n' +
-            'Player 1 HP: ' + str(player1.getHealth()) + '\n'
-            'Player 2 HP: ' + str(player2.getHealth()) + '\n'
-            '****************'
-    )
+def createPlayers():
+    player_count = 0
+
+    #get player count
+    while(player_count <= 0):
+        player_count = int(input('Input the amount of Players: '))
+    
+    #create players
+    players = []
+    for i in range(player_count):
+        players.append(Player())
+    return players
+
+def printPlayerHeaths(players):
+    players_hps = ''
+    for i in range(players):
+        players += 'Player ' + players[i].getId() + ' HP: ' + str(players[i].getHealth() + '\n')
+
+    print('****************\n' + players_hps + '\n****************')
+
+def playerChoices(players):
+    for i in range(len(players)):
+        player_input = getpass.getpass('Please input Rock, Paper or Scissors: ')
+        players[i].setChoice(player_input)
 
 def checkRoundResults(player1_input, player2_input):
     results = player1_input - player2_input
@@ -23,25 +40,25 @@ def checkRoundResults(player1_input, player2_input):
         return 2
 
 def main():
-    #create both players
-    player1 = pl()
-    player2 = pl()
-
     #display controls
     print('Controls: r = Rock, p = Paper, s = Scissors, press ENTER to submit your choice')
-    while True:
+
+    #create both players
+    players = createPlayers()
+    game_on = True
+    while game_on:
         #display players healths
-        printPlayerHeaths(player1, player2)
+        printPlayerHeaths(players)
 
         #players input their choice of rock, paper or scissors
-        player1_input = getpass.getpass('Please input Rock, Paper or Scissors: ').lower()
-        player2_input = getpass.getpass('Please input Rock, Paper or Scissors: ').lower()
+        playerChoices = playerChoices(players)
 
         #clear the terminal
         os.system('cls')
 
+        #TODO: UPDATE THIS
         #get the results of the player choices
-        roundResults = checkRoundResults(ord(player1_input), ord(player2_input))
+        roundResults = checkRoundResults(players)
 
         #deal damage to loser of the round
         if(roundResults == 0):
@@ -52,5 +69,15 @@ def main():
             print('Player 2 won the round!')
         else:
             print('Draw!')
+
+        #check to see if any of the players won
+        if(player1.getHealth() == 0):
+                os.system('cls')
+                print('Player 2 wins!')
+                game_on = False
+        elif(player2.getHealth() == 0):
+                os.system('cls')
+                print('Player 1 wins!')
+                game_on = False
 
 main()
