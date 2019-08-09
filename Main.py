@@ -23,15 +23,27 @@ def checkRoundResults(player1_input, player2_input):
         return 2
 
 def main():
+    #create both players
     player1 = pl()
     player2 = pl()
+
+    #display controls
     print('Controls: r = Rock, p = Paper, s = Scissors, press ENTER to submit your choice')
     while True:
+        #display players healths
         printPlayerHeaths(player1, player2)
+
+        #players input their choice of rock, paper or scissors
         player1_input = getpass.getpass('Please input Rock, Paper or Scissors: ').lower()
         player2_input = getpass.getpass('Please input Rock, Paper or Scissors: ').lower()
+
+        #clear the terminal
         os.system('cls')
+
+        #get the results of the player choices
         roundResults = checkRoundResults(ord(player1_input), ord(player2_input))
+
+        #deal damage to loser of the round
         if(roundResults == 0):
             player2.damageHealth(10)
             print('Player 1 won the round!')
