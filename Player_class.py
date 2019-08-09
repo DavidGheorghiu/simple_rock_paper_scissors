@@ -8,5 +8,6 @@ class Player:
     def damageHealth(self, damage):
         self.health -= damage
 
+    #future use (idea)
     def restoreHealth(self, heal):
         self.health -= heal
