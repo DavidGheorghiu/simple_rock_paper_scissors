@@ -3,10 +3,12 @@ import os
 from Player_class import Player as pl
 
 def printPlayerHeaths(player1, player2):
-    print('****************')
-    print('Player 1 HP: ' + str(player1.getHealth()))
-    print('Player 2 HP: ' + str(player2.getHealth()))
-    print('****************')
+    print(
+            '****************\n' +
+            'Player 1 HP: ' + str(player1.getHealth()) + '\n'
+            'Player 2 HP: ' + str(player2.getHealth()) + '\n'
+            '****************'
+    )
 
 def checkRoundResults(player1_input, player2_input):
     results = player1_input - player2_input
