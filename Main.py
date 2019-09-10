@@ -17,27 +17,48 @@ def createPlayers():
 
 def printPlayerHeaths(players):
     players_hps = ''
-    for i in range(players):
-        players += 'Player ' + players[i].getId() + ' HP: ' + str(players[i].getHealth() + '\n')
+    for player in players:
+        players_hps += 'Player ' + str(player.getId()) + ' HP: ' + str(player.getHealth()) + '\n'
 
     print('****************\n' + players_hps + '\n****************')
 
 def playerChoices(players):
-    for i in range(len(players)):
+    for player in players:
         player_input = getpass.getpass('Please input Rock, Paper or Scissors: ')
-        players[i].setChoice(player_input)
+        player.setChoice(player_input)
 
-def checkRoundResults(player1_input, player2_input):
-    results = player1_input - player2_input
-    if(results == -1 or results == -2 or results == 3):
-        #player1 won the round
-        return 0
-    elif(results == 1 or results == 2 or results == -3):
-        #player2 won the round
-        return 1
-    else:
-        #draw
-        return 2
+def checkRoundResults(players):
+    #rock, paper and scissors counts
+    rock_count = 0
+    paper_count = 0
+    scissors_count = 0
+
+    #count rock, paper and scissor choices
+    for player in players:
+        player_choice = player.getChoice()
+        if(player_choice == 'r'):
+            rock_count += 1
+        elif(player_choice == 'p'):
+            paper_count += 1
+        else:
+            scissors_count += 1
+
+    #do damage to players based on choices
+    for player in players:
+        player_choice = player.getChoice()
+        if(player_choice == 'r'):
+            player.damageHealth(paper_count*10)
+        elif(player_choice == 'p'):
+            player.damageHealth(scissors_count*10)
+        else:
+            player.damageHealth(rock_count*10)
+        
+        #remove losers from the list of players
+        if(player.getHealth() <= 0):
+            #TODO: have players names in the future and print them instead of ids
+            print('Player ' + str(player.getId()) + ' has lost!')
+            players.remove(player)
+        
 
 def main():
     #display controls
@@ -51,33 +72,16 @@ def main():
         printPlayerHeaths(players)
 
         #players input their choice of rock, paper or scissors
-        playerChoices = playerChoices(players)
+        player_choices = playerChoices(players)
 
         #clear the terminal
         os.system('cls')
 
-        #TODO: UPDATE THIS
         #get the results of the player choices
-        roundResults = checkRoundResults(players)
+        checkRoundResults(players)
 
-        #deal damage to loser of the round
-        if(roundResults == 0):
-            player2.damageHealth(10)
-            print('Player 1 won the round!')
-        elif(roundResults == 1):
-            player1.damageHealth(10)
-            print('Player 2 won the round!')
-        else:
-            print('Draw!')
-
-        #check to see if any of the players won
-        if(player1.getHealth() == 0):
-                os.system('cls')
-                print('Player 2 wins!')
-                game_on = False
-        elif(player2.getHealth() == 0):
-                os.system('cls')
-                print('Player 1 wins!')
-                game_on = False
+        if(len(players) == 1):
+            print(str(players[0].getId()) + ' has won!')
+            return
 
 main()
